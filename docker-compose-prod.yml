@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  api:
+    image: api
+    ports: 
+      - "80:8000"
+    depends_on:
+      - postgres
+    # command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    environment:
+      - database_hostname=${DATABASE_HOSTNAME}
+      - database_port=${DATABASE_PORT}
+      - database_password=${DATABASE_PASSWORD}
+      - database_name=${DATABASE_NAME}
+      - database_username=${DATABASE_USERNAME}
+      - secret_key=${SECRET_KEY}
+      - algorithm=${ALGORITHM}
+      - access_token_expire_minutes=${ACCESS_TOKEN_EXPIRE_MINUTES}
+
+  postgres:
+    image: postgres:15.1                                                                                                                                                                                                                                                                                                                                                              
+    environment:
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    
+volumes:
+  postgres-db:
